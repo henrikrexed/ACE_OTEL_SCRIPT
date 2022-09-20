@@ -4,7 +4,7 @@ DEMO_NAME=oteltraining
 
 .PHONY: build
 build:
-	docker build -t $(IMAGE_NAME):$(IMAGE_VERSION) . --build-arg API_TOKEN=$2 DT_ENV_URL=$1.
+	docker build -t $(IMAGE_NAME):$(IMAGE_VERSION) . --build-arg API_TOKEN=$2 DT_ENV_URL=$1
 
 .PHONY: run
 run:

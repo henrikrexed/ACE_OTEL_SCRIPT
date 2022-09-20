@@ -15,8 +15,8 @@ The Google HipsterShop is a microservice architecture using several langages :
 * Nodejs
 * C#
 * Java
-
-
+  dt0c01.RWUC4RSXGBRJFWITBJ3PPCZ6.I6XACEKFCQ3XH73WECPALGKNWUTJNP4PZL2QXANOI52DNJJG4VDVLAI2JKTLQREO
+  https://dtmanaged.dynatrace.training/e/fa88e26d-66ca-4db2-b809-e3f62c737c3c
 
 ## Prerequisite
 The following tools need to be install on your machine :
