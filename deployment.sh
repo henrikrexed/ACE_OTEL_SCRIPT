@@ -120,11 +120,13 @@ echo "Deploying Otel Collector"
 kubectl apply -f kubernetes-manifests/rbac.yaml
 sed -i "s,DT_TENANT_URL,$ENVIRONMENT_URL," kubernetes-manifests/openTelemetry-manifest.yaml
 sed -i "s,DT_TOKEN,$API_TOKEN," kubernetes-manifests/openTelemetry-manifest.yaml
+#wait for the opentelemtry operator webhook to start
+kubectl wait pod --namespace default -l app.kubernetes.io/name=opentelemetry-operator -n  opentelemetry-operator-system --for=condition=Ready --timeout=2m
 #Deploy demo Application
 echo "Deploying Hipstershop"
 kubectl create ns hipster-shop
 kubectl apply -f kubernetes-manifests/openTelemetry-sidecar.yaml -n hipster-shop
-kubectl apply -f kubernetes-manifests/k8sdemo.yaml -n hipster-shop
+kubectl apply -f kubernetes-manifests/K8sdemo.yaml -n hipster-shop
 
 # Echo environ*
 echo "========================================================"
