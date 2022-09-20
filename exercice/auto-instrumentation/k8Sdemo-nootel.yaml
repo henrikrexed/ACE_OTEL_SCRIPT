@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: emailservice
+  namespace: hipster-shop-nootel
   label:
     technology: "python"
 spec:
@@ -49,6 +50,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: emailservice
+  namespace: hipster-shop-nootel
 spec:
   type: ClusterIP
   selector:
@@ -63,6 +65,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: checkoutservice
+  namespace: hipster-shop-nootel
 spec:
   selector:
     matchLabels:
@@ -120,6 +123,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: checkoutservice
+  namespace: hipster-shop-nootel
 spec:
   type: ClusterIP
   selector:
@@ -134,6 +138,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: recommendationservice
+  namespace: hipster-shop-nootel
   labels:
     technology: "python"
 spec:
@@ -184,6 +189,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: recommendationservice
+  namespace: hipster-shop-nootel
 spec:
   type: ClusterIP
   selector:
@@ -198,6 +204,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: k6loadgenerator
+  namespace: hipster-shop-nootel
 spec:
   selector:
     matchLabels:
@@ -221,7 +228,7 @@ spec:
           args: ["-u", "50", "-d", "24h"]
           env:
             - name: FRONTEND_ADDR
-              value: "onlineboutique-nootel.IP_TO_REPLACE.nip.io"
+              value: "frontend"
             - name: K6_PROMETHEUS_REMOTE_URL
               value: http://PROM_SVC_TO_REPLACE.default.svc.cluster.local:9090/api/v1/write
             - name: OTLP_SERVICE_ADDR
@@ -238,6 +245,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
+  namespace: hipster-shop-nootel
 spec:
   selector:
     matchLabels:
@@ -311,6 +319,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend
+  namespace: hipster-shop-nootel
 spec:
   type: ClusterIP
   selector:
@@ -321,28 +330,12 @@ spec:
       port: 80
       targetPort: 8080
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: onlineboutique-ingress
-spec:
-  ingressClassName: nginx
-  rules:
-    - host :  "onlineboutique-nootel.IP_TO_REPLACE.nip.io"
-      http:
-        paths:
-          - pathType: ImplementationSpecific
-            path: "/"
-            backend:
-              service:
-                name: frontend
-                port:
-                  number: 80
----
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: paymentservice
+  namespace: hipster-shop-nootel
   labels:
     technology: "nodejs"
 spec:
@@ -387,6 +380,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: paymentservice
+  namespace: hipster-shop-nootel
 spec:
   type: ClusterIP
   selector:
@@ -447,6 +441,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: productcatalogservice
+  namespace: hipster-shop-nootel
 spec:
   type: ClusterIP
   selector:
@@ -516,6 +511,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cartservice
+  namespace: hipster-shop-nootel
 spec:
   type: ClusterIP
   selector:
@@ -530,6 +526,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: currencyservice
+  namespace: hipster-shop-nootel
   labels:
     technology: "nodejs"
 spec:
@@ -575,6 +572,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: currencyservice
+  namespace: hipster-shop-nootel
 spec:
   type: ClusterIP
   selector:
@@ -635,6 +633,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: shippingservice
+  namespace: hipster-shop-nootel
 spec:
   type: ClusterIP
   selector:
@@ -702,6 +701,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: redis-cart
+  namespace: hipster-shop-nootel
 spec:
   type: ClusterIP
   selector:
@@ -716,6 +716,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: adservice
+  namespace: hipster-shop-nootel
   labels:
     technology: "java"
 spec:
@@ -764,6 +765,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: adservice
+  namespace: hipster-shop-nootel
 spec:
   type: ClusterIP
   selector:

@@ -64,10 +64,6 @@ if [ -z "$API_TOKEN" ]; then
   exit 1
 fi
 
-if [ -z "$BASTION_USER" ]; then
-  echo "Error: BASTION_USER not set!"
-  exit 1
-fi
 
 
 if [ -z "$GITCLONE" ]; then
@@ -93,29 +89,6 @@ fi
 #  echo "-- Waiting for all resources to be ready (timeout 2 mins) --"
 #  kubectl wait --for=condition=ready pods --all --all-namespaces --timeout=2m
 #fi
-
-###### DEploy Nginx
-echo "start depploying Nginx"
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
-helm upgrade --install ingress-nginx ingress-nginx \
-  --repo https://kubernetes.github.io/ingress-nginx \
-  --namespace ingress-nginx --create-namespace
-
-### get the ip adress of ingress ####
-IP=""
-while [ -z $IP ]; do
-  echo "Waiting for external IP"
-  IP=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -ojson | jq -j '.status.loadBalancer.ingress[].ip')
-  [ -z "$IP" ] && sleep 10
-done
-echo 'Found external IP: '$IP
-
-### Update the ip of the ip adress for the ingres
-#TODO to update this part to use the dns entry /ELB/ALB
-sed -i "s,IP_TO_REPLACE,$IP," kubernetes-manifests/k8sdemo.yaml
-sed -i "s,IP_TO_REPLACE,$IP," exercice/auto-instrumentation/k8Sdemo-nootel.yaml
-
 
 
 ### Depploy Prometheus
