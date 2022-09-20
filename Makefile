@@ -1,12 +1,11 @@
 IMAGE_NAME=hrexed/oteltraining
 IMAGE_VERSION=0.1
 DEMO_NAME=oteltraining
-DT_TOKEN=$2
-DT_ENV_URL=$1
+
 
 .PHONY: build
 build:
-	docker build -t $(IMAGE_NAME):$(IMAGE_VERSION) . --build-arg API_TOKEN=$(DT_TOKEN) --build-arg DT_ENV_URL=$(DT_TOKEN) --no-cache
+	docker build -t $(IMAGE_NAME):$(IMAGE_VERSION) . --build-arg API_TOKEN=$(DT_TOKEN) --build-arg DT_ENV_URL=$(DT_ENV_URL) --no-cache
 
 .PHONY: run
 run:
