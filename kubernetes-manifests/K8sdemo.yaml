@@ -334,24 +334,6 @@ spec:
       port: 80
       targetPort: 8080
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: onlineboutique-ingress
-spec:
-  ingressClassName: nginx
-  rules:
-    - host :  "demo.IP_TO_REPLACE.nip.io"
-      http:
-        paths:
-          - pathType: ImplementationSpecific
-            path: "/"
-            backend:
-              service:
-                name: frontend
-                port:
-                  number: 80
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
