@@ -7,6 +7,8 @@ RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master
     ./get_helm.sh
 
 WORKDIR /root
+ARG API_TOKEN
+ARG DT_ENV_URL
 COPY k3dconfig.yaml .
 COPY deployment.sh .
 ADD kubernetes-manifests/ ./kubernetes-manifests
@@ -14,4 +16,4 @@ ADD exercice/ ./exercice
 
 ENV PATH="${PATH}:/root"
 
-ENTRYPOINT ["/bin/bash", "./deployment.sh", "--gitclone=false"]
+ENTRYPOINT ["/bin/bash", "./deployment.sh", "--k3d=false" , " --api-token=$API_TOKEN", "--environment-url=$DT_ENV_URL"]

@@ -1,6 +1,6 @@
-IMAGE_NAME=hrexed/observk8s
+IMAGE_NAME=hrexed/oteltraining
 IMAGE_VERSION=0.1
-DEMO_NAME=observk8s
+DEMO_NAME=oteltraining
 
 .PHONY: build
 build:
