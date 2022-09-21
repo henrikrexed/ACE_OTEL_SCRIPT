@@ -3,8 +3,6 @@ kind: Deployment
 metadata:
   name: emailservice
   namespace: hipster-shop-nootel
-  label:
-    technology: "python"
 spec:
   selector:
     matchLabels:
@@ -18,11 +16,12 @@ spec:
         service: emailservice
         product: hipster-shop
       annotations:
-        sidecar.opentelemetry.io/inject: "otel-sidecar"
+        sidecar.opentelemetry.io/inject: "true"
+        technology: "python"
     spec:
       terminationGracePeriodSeconds: 5
       containers:
-        - name: server
+        - name: emailservice
           image: hrexed/emailservice-nootel:0.1
           imagePullPolicy: Always
           ports:
@@ -30,6 +29,10 @@ spec:
           env:
             - name: PORT
               value: "8080"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "localhost:4317"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: service.name=emailservicenotel
           readinessProbe:
             periodSeconds: 5
             exec:
@@ -139,8 +142,6 @@ kind: Deployment
 metadata:
   name: recommendationservice
   namespace: hipster-shop-nootel
-  labels:
-    technology: "python"
 spec:
   selector:
     matchLabels:
@@ -154,11 +155,12 @@ spec:
         service: recommendationservice
         product: hipster-shop
       annotations:
-        sidecar.opentelemetry.io/inject: "otel-sidecar"
+        sidecar.opentelemetry.io/inject: "true"
+        technology: "python"
     spec:
       terminationGracePeriodSeconds: 5
       containers:
-        - name: server
+        - name: recommendationservice
           image: hrexed/recommendationservice-nootel:0.1
           imagePullPolicy: Always
           ports:
@@ -176,6 +178,10 @@ spec:
               value: "8080"
             - name: PRODUCT_CATALOG_SERVICE_ADDR
               value: "productcatalogservice:3550"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "localhost:4317"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: service.name=recommendationservicenotel
           resources:
             requests:
               cpu: 100m
@@ -336,8 +342,6 @@ kind: Deployment
 metadata:
   name: paymentservice
   namespace: hipster-shop-nootel
-  labels:
-    technology: "nodejs"
 spec:
   selector:
     matchLabels:
@@ -352,6 +356,7 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        technology: "nodejs"
     spec:
       terminationGracePeriodSeconds: 5
       containers:
@@ -362,6 +367,10 @@ spec:
           env:
             - name: PORT
               value: "50051"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "localhost:4317"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: service.name=paymentservicenotel
           readinessProbe:
             exec:
               command: ["/bin/grpc_health_probe", "-addr=:50051"]
@@ -395,6 +404,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: productcatalogservice
+  namespace: hipster-shop-nootel
 spec:
   selector:
     matchLabels:
@@ -456,6 +466,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cartservice
+  namespace: hipster-shop-nootel
 spec:
   selector:
     matchLabels:
@@ -470,20 +481,19 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        technology: "dotnet"
     spec:
       terminationGracePeriodSeconds: 5
       containers:
-        - name: server
-          image: hrexed/cartservice-otel:0.1
+        - name: cartservice
+          image: gcr.io/dynatrace-demoability/cartservice:original
           ports:
             - containerPort: 7070
           env:
-            - name: OTLP_PORT
-              value: "4317"
-            - name: OTLP_HOST
-              value: "localhost"
-            - name: OTLP-SERVICENAME
-              value: "cartservicotel"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "localhost:4317"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: service.name=cartservicenotel
             - name: REDIS_ADDR
               value: "redis-cart:6379"
             - name: PORT
@@ -527,8 +537,6 @@ kind: Deployment
 metadata:
   name: currencyservice
   namespace: hipster-shop-nootel
-  labels:
-    technology: "nodejs"
 spec:
   selector:
     matchLabels:
@@ -543,6 +551,7 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        technology: "nodejs"
     spec:
       terminationGracePeriodSeconds: 5
       containers:
@@ -554,6 +563,10 @@ spec:
           env:
             - name: PORT
               value: "7000"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "localhost:4317"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: service.name=currencyservicenotel
           readinessProbe:
             exec:
               command: ["/bin/grpc_health_probe", "-addr=:7000"]
@@ -587,6 +600,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: shippingservice
+  namespace: hipster-shop-nootel
 spec:
   selector:
     matchLabels:
@@ -648,6 +662,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis-cart
+  namespace: hipster-shop-nootel
 spec:
   selector:
     matchLabels:
@@ -717,8 +732,6 @@ kind: Deployment
 metadata:
   name: adservice
   namespace: hipster-shop-nootel
-  labels:
-    technology: "java"
 spec:
   selector:
     matchLabels:
@@ -733,6 +746,7 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        technology: "java"
     spec:
       terminationGracePeriodSeconds: 5
       containers:
@@ -743,6 +757,10 @@ spec:
           env:
             - name: PORT
               value: "9555"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "localhost:4317"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: service.name=adservicenotel
           resources:
             requests:
               cpu: 200m
