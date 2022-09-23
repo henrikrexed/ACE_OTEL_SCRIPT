@@ -90,7 +90,8 @@ fi
 #  kubectl wait --for=condition=ready pods --all --all-namespaces --timeout=2m
 #fi
 
-
+HOME_SCRIPT_DIRECTORY=/home/dtu_training/ACE_OTEL_SCRIPT
+echo "SCript folder is $HOME_SCRIPT_DIRECTORY"
 ### Depploy Prometheus
 echo "start depploying Prometheus"
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -104,7 +105,7 @@ GRAFANA_SERVICE=$(kubectl get svc -l app.kubernetes.io/name=grafana -o jsonpath=
 echo "Grafana service name is  $GRAFANA_SERVICE"
 ALERT_MANAGER_SVC=$(kubectl get svc -l app=kube-prometheus-stack-alertmanager -o jsonpath="{.items[0].metadata.name}")
 echo "Alertmanager service name is  $ALERT_MANAGER_SVC"
-sed -i "s,PROM_SVC_TO_REPLACE,$PROMETHEUS_SERVER," exercice/auto-instrumentation/k8Sdemo-nootel.yaml
+sed -i "s,PROM_SVC_TO_REPLACE,$PROMETHEUS_SERVER," $HOME_SCRIPT_DIRECTORY/exercice/auto-instrumentation/k8Sdemo-nootel.yaml
 
 #### Deploy the cert-manager
 echo "Deploying Cert Manager ( for OpenTelemetry Operator)"
@@ -117,16 +118,16 @@ kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releas
 
 #Deploy the OpenTelemetry Collector
 echo "Deploying Otel Collector"
-kubectl apply -f kubernetes-manifests/rbac.yaml
-sed -i "s,DT_TENANT_URL,$ENVIRONMENT_URL," kubernetes-manifests/openTelemetry-manifest.yaml
-sed -i "s,DT_TOKEN,$API_TOKEN," kubernetes-manifests/openTelemetry-manifest.yaml
+kubectl apply -f $HOME_SCRIPT_DIRECTORY/kubernetes-manifests/rbac.yaml
+sed -i "s,DT_TENANT_URL,$ENVIRONMENT_URL," $HOME_SCRIPT_DIRECTORY/kubernetes-manifests/openTelemetry-manifest.yaml
+sed -i "s,DT_TOKEN,$API_TOKEN," $HOME_SCRIPT_DIRECTORY/kubernetes-manifests/openTelemetry-manifest.yaml
 #wait for the opentelemtry operator webhook to start
 kubectl wait pod --namespace default -l app.kubernetes.io/name=opentelemetry-operator -n  opentelemetry-operator-system --for=condition=Ready --timeout=2m
 #Deploy demo Application
 echo "Deploying Hipstershop"
 kubectl create ns hipster-shop
-kubectl apply -f kubernetes-manifests/openTelemetry-sidecar.yaml -n hipster-shop
-kubectl apply -f kubernetes-manifests/K8sdemo.yaml -n hipster-shop
+kubectl apply -f $HOME_SCRIPT_DIRECTORY/kubernetes-manifests/openTelemetry-sidecar.yaml -n hipster-shop
+kubectl apply -f $HOME_SCRIPT_DIRECTORY/kubernetes-manifests/K8sdemo.yaml -n hipster-shop
 
 # Echo environ*
 echo "========================================================"
