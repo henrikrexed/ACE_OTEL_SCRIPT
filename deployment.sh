@@ -121,6 +121,13 @@ echo "Deploying Otel Collector"
 kubectl apply -f $HOME_SCRIPT_DIRECTORY/kubernetes-manifests/rbac.yaml
 sed -i "s,DT_TENANT_URL,$ENVIRONMENT_URL," $HOME_SCRIPT_DIRECTORY/kubernetes-manifests/openTelemetry-manifest.yaml
 sed -i "s,DT_TOKEN,$API_TOKEN," $HOME_SCRIPT_DIRECTORY/kubernetes-manifests/openTelemetry-manifest.yaml
+sed -i "s,DT_TENANT_URL,$ENVIRONMENT_URL," $HOME_SCRIPT_DIRECTORY/exercice/01_collector/metrics/openTelemetry-manifest.yaml
+sed -i "s,DT_TOKEN,$API_TOKEN," $HOME_SCRIPT_DIRECTORY/exercice/01_collector/metrics/openTelemetry-manifest.yaml
+sed -i "s,DT_TENANT_URL,$ENVIRONMENT_URL,"  $HOME_SCRIPT_DIRECTORY/exercice/01_collector/trace/openTelemetry-manifest.yaml
+sed -i "s,DT_TOKEN,$API_TOKEN," $HOME_SCRIPT_DIRECTORY/exercice/01_collector/trace/openTelemetry-manifest.yaml
+CLUSTERID=$(kubectl get namespace kube-system -o jsonpath='{.metadata.uid}')
+sed -i "s,CLUSTER_ID_TOREPLACE,$CLUSTERID," $HOME_SCRIPT_DIRECTORY/kubernetes-manifests/openTelemetry-sidecar.yaml
+sed -i "s,CLUSTER_ID_TOREPLACE,$CLUSTERID," $HOME_SCRIPT_DIRECTORY/exercice/02_auto-instrumentation/openTelemetry-sidecar.yaml
 #wait for the opentelemtry operator webhook to start
 kubectl wait pod --namespace default -l app.kubernetes.io/name=opentelemetry-operator -n  opentelemetry-operator-system --for=condition=Ready --timeout=2m
 #Deploy demo Application
@@ -132,7 +139,6 @@ kubectl apply -f $HOME_SCRIPT_DIRECTORY/kubernetes-manifests/K8sdemo.yaml -n hip
 # Echo environ*
 echo "========================================================"
 echo "Environment fully deployed "
-echo "Online Boutique url: http://demo.$IP.nip.io"
 echo "========================================================"
 
 

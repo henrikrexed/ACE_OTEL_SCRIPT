@@ -29,17 +29,17 @@ spec:
          spike_limit_percentage: 30
 
       metricstransform:
-        transforms:
-           include: .+
-           match_type: regexp
-           action: update
-           operations:
-             - action: add_label
-               new_label: dt.kubernetes.config.id
-               new_value: CLUSTER_ID_TOREPLACE
-             - action: update_label
-               label: system_uuid
-               new_label: dt.kubernetes.node.system_uuid
+         transforms:
+            include: .+
+            match_type: regexp
+            action: update
+            operations:
+              - action: add_label
+                new_label: dt.kubernetes.config.id
+                new_value: CLUSTER_ID_TOREPLACE
+              - action: update_label
+                label: system_uuid
+                new_label: dt.kubernetes.node.system_uuid
 
     exporters:
       logging:

@@ -417,7 +417,7 @@ spec:
         app: hipster-shop
         service: productcatalogservice
         product: hipster-shop
-      annotation:
+      annotations:
         sidecar.opentelemetry.io/inject: "true"
     spec:
       terminationGracePeriodSeconds: 5
@@ -481,19 +481,20 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
-        technology: "dotnet"
     spec:
       terminationGracePeriodSeconds: 5
       containers:
-        - name: cartservice
-          image: gcr.io/dynatrace-demoability/cartservice:original
+        image: hrexed/cartservice-otel:0.2
+          imagePullPolicy: Always
           ports:
             - containerPort: 7070
           env:
-            - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "localhost:4317"
-            - name: OTEL_RESOURCE_ATTRIBUTES
-              value: service.name=cartservicenotel
+            - name: OTLP_PORT
+              value: "4317"
+            - name: OTLP_HOST
+              value: "localhost"
+            - name: OTLP-SERVICENAME
+              value: "cartservice"
             - name: REDIS_ADDR
               value: "redis-cart:6379"
             - name: PORT
