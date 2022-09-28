@@ -484,7 +484,8 @@ spec:
     spec:
       terminationGracePeriodSeconds: 5
       containers:
-        image: hrexed/cartservice-otel:0.2
+        - name: cartservice
+          image: hrexed/cartservice-otel:0.2
           imagePullPolicy: Always
           ports:
             - containerPort: 7070
